@@ -63,7 +63,7 @@ class BinarySearchTrees {
       System.out.print("Enter value : ");
       val = sc.nextInt();
     }
-    
+    sc.close();
     return true;
   }
 
@@ -87,7 +87,7 @@ class BinarySearchTrees {
 }
 
 
-public class Main {
+public class BST {
   public static void main(String[] args) {
     
     BinarySearchTrees BST = new BinarySearchTrees();
