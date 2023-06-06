@@ -1,6 +1,26 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class Graphs {
+
+    private static void printBFSHelper(int[][] mat, int src, boolean[] visited, int v) {
+        Queue<Integer> queue = new LinkedList<>();
+
+        queue.add(src);
+        visited[src] = true;
+
+        while(!queue.isEmpty()) {
+            int curr = queue.remove();
+
+            System.out.print(curr + " ");
+
+            for(int i=0; i<v; i++) {
+                if(mat[curr][i] == 1 && !visited[i]) {
+                    queue.add(i);
+                    visited[i] = true;
+                }
+            }
+        }
+    }
 
     /**
      * Prints Breadth First Search (traversal) of the Graph mat
@@ -8,7 +28,14 @@ public class Graphs {
      * @param v
      */
     private static void printBFS(int[][] mat, int v) {
-        
+        System.out.println("BFS");
+        boolean[] visited = new boolean[v];
+
+        for(int i=0; i<v; i++) {
+            if(!visited[i]) {
+                printBFSHelper(mat, i, visited, v);
+            }
+        }
     }
 
     private static void printDFSHepler(int[][] mat, int V, int src, boolean[] visited) {
