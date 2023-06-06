@@ -2,6 +2,11 @@ import java.util.*;
 
 public class GetPath {
 
+    private static ArrayList<Integer> getPathBFS(int[][] mat, int v, int sv, int ev) {
+        
+        return null;
+    }
+
     private static ArrayList<Integer> getPathDFSHelper(int[][] mat, int v, int sv, int ev, boolean[] visited) {
         
         if(sv == ev) {
@@ -53,13 +58,21 @@ public class GetPath {
 
         sc.close();
 
-        ArrayList<Integer> path = getPathDFS(mat, V, sv, ev);
-        
-        if(path == null) {
+        ArrayList<Integer> pathDFS = getPathDFS(mat, V, sv, ev);
+        ArrayList<Integer> pathBFS = getPathBFS(mat, V, sv, ev);
+
+        if(pathBFS == null) {
             System.out.println("Sorry!!! No path found.");
         }
         else {
-            System.out.println(path.toString());
+            System.out.println(pathBFS.toString());
+        }
+        
+        if(pathDFS == null) {
+            System.out.println("Sorry!!! No path found.");
+        }
+        else {
+            System.out.println(pathDFS.toString());
         }
     }
 
