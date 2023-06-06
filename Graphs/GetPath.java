@@ -3,8 +3,48 @@ import java.util.*;
 public class GetPath {
 
     private static ArrayList<Integer> getPathBFS(int[][] mat, int v, int sv, int ev) {
+
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] visited = new boolean[v];
+
+        queue.add(sv);
+        visited[sv] = true;
+
+        HashMap<Integer, Integer> map = new HashMap<>();
+
+        while(!queue.isEmpty()) {
+            int curr = queue.remove();
+
+            if(curr == ev) {
+                break;
+            }
+
+            for(int i=0; i<v; i++) {
+                if(mat[curr][i] == 1 && !visited[i]) {
+                    queue.add(i);
+                    visited[i] = true;
+                    map.put(i, curr);
+                }
+            }
+        }
+
+        ArrayList<Integer> path = new ArrayList<>();
         
-        return null;
+        path.add(ev);
+
+        while(sv != ev) {
+            if(map.containsKey(ev)) {
+                path.add(map.get(ev));
+                ev = map.get(ev);
+            }
+            else {
+                path = null;
+                break;
+            }
+            
+        }
+
+        return path;
     }
 
     private static ArrayList<Integer> getPathDFSHelper(int[][] mat, int v, int sv, int ev, boolean[] visited) {
@@ -56,24 +96,35 @@ public class GetPath {
         int sv = sc.nextInt();
         int ev = sc.nextInt();
 
-        sc.close();
-
-        ArrayList<Integer> pathDFS = getPathDFS(mat, V, sv, ev);
-        ArrayList<Integer> pathBFS = getPathBFS(mat, V, sv, ev);
-
-        if(pathBFS == null) {
-            System.out.println("Sorry!!! No path found.");
-        }
-        else {
-            System.out.println(pathBFS.toString());
-        }
+        System.out.println("1.DFS method \n2.BFS method");
+        int choice = sc.nextInt();
         
-        if(pathDFS == null) {
-            System.out.println("Sorry!!! No path found.");
+        switch (choice) {
+            case 1:
+                ArrayList<Integer> pathDFS = getPathDFS(mat, V, sv, ev);
+                if(pathDFS == null) {
+                    System.out.println("Sorry!!! No path found.");
+                }
+                else {
+                    System.out.println(pathDFS.toString());
+                }
+            break;
+
+            case 2:
+                ArrayList<Integer> pathBFS = getPathBFS(mat, V, sv, ev);
+                if(pathBFS == null) {
+                    System.out.println("Sorry!!! No path found.");
+                }
+                else {
+                    System.out.println(pathBFS.toString());
+                }
+            break;
+        
+            default:
+                break;
         }
-        else {
-            System.out.println(pathDFS.toString());
-        }
+
+        sc.close();
     }
 
 }
