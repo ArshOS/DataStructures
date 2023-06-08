@@ -35,35 +35,32 @@ class Edge {
 
 public class MST {
 
-    private static boolean hasPathHelper(int[][] mat, int sv, int ev, boolean[] visited) {
-
-        if(sv == ev) {
-            return true;
-        }
-
-        visited[sv] = true;
-
-        for(int i=0; i<mat.length; i++) {
-            if(mat[sv][i] > 0 && !visited[i]) {
-                if(hasPathHelper(mat, i, ev, visited)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private static boolean hasPath(int[][] mat, int v, int sv, int ev) {
-
-        boolean[] visited = new boolean[v];
-
-        return hasPathHelper(mat, sv, ev, visited);
-    }
-
+    /**
+     * The idea is to build MST using the concept of Sets. Initially, all vertices belong to different set.
+     * Here, to denote this a set array is used which initially store 0 for all the verticies stating all the vertices 
+     * belong to different set. 
+     * 
+     * When an edge is pulled from edgeList, we check if sv and ev both belong to same set. If set value for both vertices 
+     * is same and 0. It means none of the vertices of the current edge is part of the current MST. We put both vertices in 
+     * the same set and increment set number (setGroupFlag++).
+     * 
+     * If the set number for both the vertices are same and not 0, assign set number of vertices which is non-zero 
+     * to the set number of 0 set vertex.
+     * 
+     * If non of the set number of current pair of vertices is zero, we assing set number of ev to all the vertices that 
+     * belong to the set of vertex sv. This step can be done other way around as well.
+     * 
+     * Basically, this approach is an eased version of Union Find algorithm, which detects cycle in a given graph.
+     * 
+     * @param edgeList
+     * @param e
+     * @param v
+     * @return
+     */
     private static ArrayList<Edge> buildMST(ArrayList<Edge> edgeList, int e, int v) {
 
-        int[][] mat = new int[v][v];
+        int[] sets = new int[v];
+        int setsGroupFlag = 1;
        
         Collections.sort(edgeList, new weightComparator());
 
@@ -73,8 +70,25 @@ public class MST {
 
             Edge curr = edgeList.get(i);
 
-            if(!hasPath(mat, v, curr.sv, curr.ev)) {
-                mat[curr.sv][curr.ev] = curr.wt;
+            if(sets[curr.sv] != sets[curr.ev] || (sets[curr.sv] == 0 && sets[curr.ev] == 0)) {
+              
+                if(sets[curr.sv] == 0 && sets[curr.ev] == 0) {
+                    sets[curr.sv] = sets[curr.ev] = setsGroupFlag++;
+                }
+                else if(sets[curr.sv] == 0 && sets[curr.ev] != 0) {
+                    sets[curr.sv] = sets[curr.ev];
+                }
+                else if(sets[curr.sv] != 0 && sets[curr.ev] == 0) {
+                    sets[curr.ev] = sets[curr.sv];
+                }
+                else{
+                    for(int j=0; j<v; j++) {
+                        int currSet = sets[curr.ev];
+                        if(sets[j] == sets[currSet]) {
+                            sets[j] = sets[curr.sv];
+                        }
+                    }
+                }
                 MST.add(curr);
             }
 
@@ -86,7 +100,6 @@ public class MST {
         return MST;
 
     }
-   
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int V = sc.nextInt();
@@ -107,6 +120,7 @@ public class MST {
 
         ArrayList<Edge> MST = buildMST(edgeList, E, V);
 
+        System.out.println("Required MST is: ");
         for(Edge edge : MST) {
             System.out.println(edge.sv + " " + edge.ev + " " + edge.wt);
         }
