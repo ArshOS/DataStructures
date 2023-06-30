@@ -2,7 +2,7 @@ import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Queue;
 
-public class CycleDetection {
+public class CycleDetectionUG {
 
     public static boolean isCysclicDisjointSets(int[][] mat, int V, int E) {
 
